@@ -3,5 +3,5 @@ cursed password validator program\
 trash code as always :)
 
 # building
-cmake(ver >= 3.1) and gcc is needed.
-``mkdir build cd build cmake .. . cmake --build .``
+cmake(ver >= 3.1) and gcc is needed.\
+commands: ``mkdir build cd build cmake .. . cmake --build .``
