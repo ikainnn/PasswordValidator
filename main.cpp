@@ -3,7 +3,7 @@
 #include <iostream>
 #include <numeric>
 
-#include "pswd/secutiry.hpp"
+#include "pswd/security.hpp"
 
 // sketchy password validator i did for fun.
 
