@@ -22,6 +22,6 @@ int main()
     //clear console output(unix)
     std::cout << "\x1B[2J\x1B[H";
 
-    std::cout << password << " has an entropy of [" << passwordEntropy << "]";
+    std::cout << password << " has an entropy of [" << passwordEntropy << ']';
     std::cout << "\nwhich is considered: " << pswd::parse_entropy(passwordEntropy) << '\n';
 }
