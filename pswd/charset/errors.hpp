@@ -10,7 +10,7 @@ namespace pswd::charset::errors
     constexpr const char* g_repeatedChars     = "your password have too many repetaed characters.";
     constexpr const char* g_sequencialChars   = "your password have too many sequencial characters.";
 
-    inline double error_message(const std::string_view& error) 
+    inline std::double_t error_message(const std::string_view& error) 
     {
         std::cout << error << '\n'; return 0.0;
     }
