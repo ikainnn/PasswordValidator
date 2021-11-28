@@ -7,7 +7,7 @@ namespace pswd::charset::errors
     constexpr const char* g_numericNotFound   = "your password must have atleast one numeric character.";
     constexpr const char* g_specialNotFound   = "your password must have atleast one special character.";
     constexpr const char* g_invalidPassSize   = "invalid password size.";
-    constexpr const char* g_repeatedChars     = "your password have too many repetaed characters.";
+    constexpr const char* g_repeatedChars     = "your password have too many repeated characters.";
     constexpr const char* g_sequencialChars   = "your password have too many sequencial characters.";
 
     inline std::double_t error_message(const std::string_view& error) 
