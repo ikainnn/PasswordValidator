@@ -1,5 +1,4 @@
 # password_validator
-cursed password validator program\
 trash code as always :)
 
 ![logo](https://cdn.discordapp.com/emojis/854005239388962846.png?size=256)
