@@ -2,9 +2,13 @@
 #define A7A114CC_D30E_4D73_B48F_924481B695B7
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <numeric>
+
+#include "charset/errors.hpp"
+#include "charset/charset.hpp"
 
 namespace pswd
 {

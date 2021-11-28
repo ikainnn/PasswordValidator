@@ -1,29 +1,18 @@
 #include "security.hpp"
 
 namespace pswd
-{
-    // ascii table characters. in total we have a charset pool of size 30
-    static constexpr char g_upperCaseA          = 65, g_upperCaseZ        = 90,
-                          g_numericZero         = 48, g_numericNine       = 57,
-                          g_specialCharsBegin_1 = 33, g_specialCharsEnd_1 = 47, 
-                          g_specialCharsBegin_2 = 58, g_specialCharsEnd_2 = 64;
-
-    static double error_message(const std::string_view& error)
-    {
-        std::cout << error; return 0.0;
-    }
-    
+{    
     static std::double_t calc_password_entropy(const std::size_t passwordSize) 
     {
         // source: https://generatepasswords.org/how-to-calculate-entropy/
         return std::log2(std::pow(2*26 + 30, passwordSize));
     }
     
-    static bool search_chars_between(const std::string_view& password, char start, char end)
+    static bool search_charset_chars(const std::string_view& password, std::vector<char> charset)
     {
         auto result = std::find_if(
-            password.begin(), password.end(), [start, end](const auto character) {
-                return character >= start && character <= end;
+            password.begin(), password.end(), [&charset](const auto& currentChar) {
+                return std::find(charset.begin(), charset.end(),currentChar) != charset.end();
             });
         return result != password.end();
     }
@@ -39,7 +28,6 @@ namespace pswd
 
                 return count;
             });
-
         return result;
     }
     
@@ -54,7 +42,6 @@ namespace pswd
 
                 return count;
             });
-
         return result;
     }
     
@@ -80,28 +67,18 @@ namespace pswd
     {
         // challenge constraint.
         if (password.size() < g_minLength || password.size() > g_maxLength)
-            return error_message("invalid password size.\n");
+            return pswd::charset::errors::error_message(pswd::charset::errors::g_invalidPassSize);
 
-        // tries to find for uppercase characters in the password.
-        if (!search_chars_between(password, g_upperCaseA, g_upperCaseZ))
-            return error_message("password must contain an uppercase character.\n");
-        
-        // tries to find for numeric digits in the password.
-        if (!search_chars_between(password, g_numericZero, g_numericNine))
-            return error_message("password must contain a number.\n");
+        // checks if the password contains characters from the charset.
+        for (const auto&[charset, message] : pswd::charset::g_charsetPool) {
+            if (!search_charset_chars(password, charset))
+                return pswd::charset::errors::error_message(message);
+        }
 
-        // will search for special characters in the password.
-        if (!(search_chars_between(password, g_specialCharsBegin_1, g_specialCharsEnd_1) ||
-              search_chars_between(password, g_specialCharsBegin_2, g_specialCharsEnd_2))) 
-            return error_message("password must contain a special character.\n");
-
-        // search for repeated chars in sequence
-        if (search_repeated_chars(password) >= 2) 
-            return error_message("too many repeated characters.\n");
-        
-        // will search for sequencial characters
-        if (search_sequencial_chars(password) >= 4)
-            return error_message("too many sequencial characters.\n");
+        if      (search_repeated_chars(password)   >= 2) 
+            return pswd::charset::errors::error_message(pswd::charset::errors::g_repeatedChars);
+        else if (search_sequencial_chars(password) >= 4)
+            return pswd::charset::errors::error_message(pswd::charset::errors::g_sequencialChars);
 
         return calc_password_entropy(password.size());
     }
