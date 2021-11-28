@@ -2,13 +2,22 @@
 
 namespace pswd
 {    
-    static std::double_t calc_password_entropy(const std::size_t passwordSize) 
+    constexpr static std::double_t calc_password_entropy(const std::size_t passwordSize) 
     {
         // source: https://generatepasswords.org/how-to-calculate-entropy/
-        return std::log2(std::pow(2*26 + 30, passwordSize));
+
+        auto charsetSize = []() -> std::size_t {
+            auto result = std::accumulate(pswd::charset::g_charsetPool.begin(), pswd::charset::g_charsetPool.end(), 1, 
+                [](auto count, const auto& elem) {
+                    return elem.first.size();
+                });
+            return result;
+        }();
+
+        return std::log2(std::pow(charsetSize, passwordSize));
     }
     
-    static bool search_charset_chars(const std::string_view& password, const std::vector<char>& charset)
+    constexpr static bool search_charset_chars(const std::string_view& password, const std::vector<char>& charset)
     {
         auto result = std::find_if(
             password.begin(), password.end(), [&charset](const auto& currentChar) {
@@ -17,7 +26,7 @@ namespace pswd
         return result != password.end();
     }
     
-    static std::int32_t search_repeated_chars(const std::string_view& password)
+    constexpr static std::int32_t search_repeated_chars(const std::string_view& password)
     {
         auto result = std::accumulate(
             password.begin(), password.end(), 0, [](auto count, const auto& currentChar) {
@@ -31,7 +40,7 @@ namespace pswd
         return result;
     }
     
-    static std::int32_t search_sequencial_chars(const std::string_view& password) 
+    constexpr static std::int32_t search_sequencial_chars(const std::string_view& password) 
     {
         auto result = std::accumulate(
             password.begin(), password.end(), 0, [](auto count, const auto& currentChar) {
@@ -68,16 +77,16 @@ namespace pswd
         // challenge constraint.
         if (password.size() < g_minLength || password.size() > g_maxLength)
             return pswd::charset::errors::error_message(pswd::charset::errors::g_invalidPassSize);
-
+        
         // checks if the password contains characters from the charset.
         for (const auto&[charset, message] : pswd::charset::g_charsetPool) {
             if (!search_charset_chars(password, charset))
                 return pswd::charset::errors::error_message(message);
         }
 
-        if      (search_repeated_chars(password)   >= 2) 
+        if      (search_repeated_chars(password)   > 2) 
             return pswd::charset::errors::error_message(pswd::charset::errors::g_repeatedChars);
-        else if (search_sequencial_chars(password) >= 4)
+        else if (search_sequencial_chars(password) > 4)
             return pswd::charset::errors::error_message(pswd::charset::errors::g_sequencialChars);
 
         return calc_password_entropy(password.size());
