@@ -18,6 +18,7 @@ int main()
     do {
         std::cin >> password;
     } while(!(passwordEntropy = pswd::validate_password(password)));
+    
     //clear console output(unix)
     std::cout << "\x1B[2J\x1B[H";
 
