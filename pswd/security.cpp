@@ -8,7 +8,7 @@ namespace pswd
         return std::log2(std::pow(2*26 + 30, passwordSize));
     }
     
-    static bool search_charset_chars(const std::string_view& password, std::vector<char> charset)
+    static bool search_charset_chars(const std::string_view& password, const std::vector<char>& charset)
     {
         auto result = std::find_if(
             password.begin(), password.end(), [&charset](const auto& currentChar) {
