@@ -9,12 +9,8 @@ namespace pswd
 
     static std::double_t calc_password_entropy(const std::size_t passwordSize) 
     {
-        auto charsetSize = pswd::charset::g_upperCharset.size() +
-                           pswd::charset::g_numericCharset.size() +
-                           pswd::charset::g_specialCharset.size();
-
         // source: https://generatepasswords.org/how-to-calculate-entropy/
-        return std::log2(std::pow(charsetSize, passwordSize));
+        return std::log2(std::pow(pswd::charset::g_charsetPoolSize, passwordSize));
     }
     
     template <std::size_t SZ>
