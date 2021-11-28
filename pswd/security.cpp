@@ -4,7 +4,7 @@ namespace pswd
 {    
     static std::int32_t error_message(const std::string_view& error) 
     {
-        std::cout << error << '\n'; return 0.0;
+        std::cout << error << '\n'; return 0;
     }
 
     static std::double_t calc_password_entropy(const std::size_t passwordSize) 
