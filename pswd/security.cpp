@@ -81,7 +81,7 @@ namespace pswd
         if (search_repeated_chars(password) > 2)
             return error_message("your password has too many repeated characters.");
 
-        // checks if the password has more than 4 sequencial characters. ie: abcde...
+        // checks if the password has more than 4 sequencial characters. ie: abcde...   
         if (search_sequencial_chars(password) > 4)
             return error_message("your password has too many sequencial characters.");
 
