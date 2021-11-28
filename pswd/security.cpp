@@ -7,10 +7,10 @@ namespace pswd
         std::cout << error << '\n'; return false;
     }
 
-    static std::double_t calc_password_entropy(const std::size_t passwordSize) 
+    static std::float_t calc_password_entropy(const std::size_t passwordSize) 
     {
         // source: https://generatepasswords.org/how-to-calculate-entropy/
-        return std::log2(std::pow(pswd::charset::g_charsetPoolSize, passwordSize));
+        return static_cast<std::float_t>(std::log2(std::pow(pswd::charset::g_charsetPoolSize, passwordSize)));
     }
     
     template <std::size_t SZ>
@@ -66,21 +66,22 @@ namespace pswd
         return result;
     }
 
-    std::string_view parse_entropy(std::double_t entropy)
+    std::string_view parse_entropy(std::float_t entropy)
     {
-        if      (entropy <= 0.0f)
-            return "are you even trying?";
-        else if (entropy >= 0.0f  && entropy <= 20.0f)
-            return "very weak";
-        else if (entropy >= 20.0f && entropy <= 40.0f)
-            return "weak";
-        else if (entropy >= 40.0f && entropy <= 50.0f)
-            return "decent";
-        else if (entropy >= 50.0f && entropy <= 60.0f)
-            return "strong";
-        else if (entropy >= 60.0f)
-            return "very strong";
-        return "???";
+        switch (static_cast<std::int32_t>(entropy)) {
+            case std::numeric_limits<std::int32_t>::min() ... 00:
+                return "are you even trying?";
+            case 01 ... 20:
+                return "very weak";
+            case 21 ... 40:
+                return "weak";
+            case 41 ... 50:
+                return "decent";
+            case 51 ... 60:
+                return "strong";
+            case 61 ... std::numeric_limits<std::int32_t>::max():
+                return "very strong";
+        }
     }
 
     std::double_t validate_password(const std::string_view& password)
