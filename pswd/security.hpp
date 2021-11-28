@@ -7,7 +7,6 @@
 #include <iostream>
 #include <numeric>
 
-#include "charset/errors.hpp"
 #include "charset/charset.hpp"
 
 namespace pswd
