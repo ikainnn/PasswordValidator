@@ -13,7 +13,7 @@ namespace pswd::charset
         { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' },
         pswd::charset::errors::g_numericNotFound};
     const CharSet g_charsetSpecial {
-        { '!',  '"', '#', '&', '%', '\'', '(', ')', '*', '+', ',',
+        { '!',  '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',',
           '-',  '.', '/', ':', ';', '<',  '=', '>', '?', '@', '[',
           '\\', ']', '^', '_', '`', '{',  '|', '}', '~' },
         pswd::charset::errors::g_specialNotFound};
@@ -23,7 +23,7 @@ namespace pswd::charset
         pswd::charset::errors::g_uppercaseNotFound};
 
     const std::array<CharSet, 3> g_charsetPool {
-        g_charsetNumeric, g_charsetSpecial, g_charsetUpper};
+        g_charsetNumeric, g_charsetSpecial, g_charsetUpper };
 }
 
 #endif /* AB61AB95_03E3_4195_B3FA_5D6F8F9CBF32 */
