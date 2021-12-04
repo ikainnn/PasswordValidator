@@ -1,12 +1,14 @@
-#ifndef A7A114CC_D30E_4D73_B48F_924481B695B7
-#define A7A114CC_D30E_4D73_B48F_924481B695B7
+#ifndef SECURITY_HPP
+#define SECURITY_HPP
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <numeric>
 
+#include "../timing.hpp"
 #include "charset/charset.hpp"
 
 namespace pswd
@@ -14,8 +16,8 @@ namespace pswd
     extern const std::size_t g_minLength;
     extern const std::size_t g_maxLength;
     
-    std::string_view parse_entropy(std::double_t entropy);
+    std::string_view parse_entropy(std::float_t entropy);
     std::double_t validate_password(const std::string_view& password);
 }
 
-#endif /* A7A114CC_D30E_4D73_B48F_924481B695B7 */
+#endif

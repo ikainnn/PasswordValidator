@@ -10,38 +10,13 @@ namespace pswd
     static std::float_t calc_password_entropy(const std::size_t passwordSize) 
     {
         // source: https://generatepasswords.org/how-to-calculate-entropy/
-        return static_cast<std::float_t>(std::log2(std::pow(pswd::charset::g_charsetPoolSize, passwordSize)));
-    }
-    
-    template <std::size_t SZ>
-    static bool search_charset_chars(const std::string_view& password, const std::array<char, SZ>& charset)
-    {
-        auto result = std::find_if(
-            password.begin(), password.end(), [&charset](const auto& currentChar) {       
-                return std::find(charset.begin(), charset.end(), currentChar) != charset.end();
-            });
-        return result != password.end();
+        return static_cast<std::float_t>(std::log2(std::pow(35 + pswd::charset::g_specialCharset.size(), passwordSize)));
     }
 
-    static bool search_charset_chars(const std::string_view& password)
-    {
-        // checks if the password contains uppercase chars
-        if (!search_charset_chars(password, pswd::charset::g_upperCharset))
-            return error_message("your password must contain atleast one uppercase character.");
-
-        // checks if the password contains numeric chars
-        if (!search_charset_chars(password, pswd::charset::g_numericCharset))
-            return error_message("your password must contain atleast one one digit.");
-
-        // checks if the password contains special chars
-        if (!search_charset_chars(password, pswd::charset::g_specialCharset))
-            return error_message("your password must contain atleast one symbol.");
-        
-        return true;
-    }
-    
     static std::int32_t search_repeated_chars(const std::string_view& password)
     {
+        // auto timerBegin = TIMER_START();
+
         auto result = std::accumulate(
             password.begin(), password.end(), 0, [](auto count, const auto& currentChar) {
                 static char lastSeenChar;
@@ -50,11 +25,16 @@ namespace pswd
                 lastSeenChar = currentChar;
                 return count;
             });
+
+        // TIMER_STOP(timerBegin);
+
         return result;
     }
     
     static std::int32_t search_sequencial_chars(const std::string_view& password) 
     {
+        // auto timerBegin = TIMER_START();
+
         auto result = std::accumulate(
             password.begin(), password.end(), 0, [](auto count, const auto& currentChar) {
                 static char lastSeenChar;
@@ -63,7 +43,39 @@ namespace pswd
                 lastSeenChar = currentChar;
                 return count;
             });
+        
+        // TIMER_STOP(timerBegin);
+
         return result;
+    }
+
+    static bool search_charset_chars(const std::string_view& password)
+    {
+        // auto timerBegin = TIMER_START();
+
+        [[maybe_unused]]bool numbrFlag = false, upperFlag = false, specialFlag = false;
+        for (const auto currentChar : password) {
+            if (!(numbrFlag && upperFlag && specialFlag)) {
+                if (!numbrFlag) numbrFlag = std::isdigit(currentChar);
+                if (!upperFlag) upperFlag = std::isupper(currentChar);
+                if (!specialFlag) {
+                    auto result = std::find(pswd::charset::g_specialCharset.begin(), 
+                                            pswd::charset::g_specialCharset.end(), currentChar);
+                    specialFlag = result != pswd::charset::g_specialCharset.end();
+                }
+            } else { break; }
+        }
+
+        // checks if the password contains uppercase chars
+        if (!upperFlag)   return error_message("your password must contain atleast one uppercase character.");
+        // checks if the password contains numeric chars
+        if (!numbrFlag)   return error_message("your password must contain atleast one one digit.");
+        // checks if the password contains special chars
+        if (!specialFlag) return error_message("your password must contain atleast one symbol.");
+
+        // TIMER_STOP(timerBegin);
+        
+        return numbrFlag && upperFlag && specialFlag;
     }
 
     std::string_view parse_entropy(std::float_t entropy)
