@@ -53,7 +53,7 @@ namespace pswd
     {
         // auto timerBegin = TIMER_START();
 
-        [[maybe_unused]]bool numbrFlag = false, upperFlag = false, specialFlag = false;
+        bool numbrFlag = false, upperFlag = false, specialFlag = false;
         for (const auto currentChar : password) {
             if (!(numbrFlag && upperFlag && specialFlag)) {
                 if (!numbrFlag) numbrFlag = std::isdigit(currentChar);
