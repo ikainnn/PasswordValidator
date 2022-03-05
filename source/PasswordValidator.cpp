@@ -7,7 +7,6 @@
 
 std::string get_user_password();
 
-
 std::int32_t main()
 {
     constexpr static std::string_view c_messageFormat = "Your password entropy has a value of {}, which is considered {}.";
