@@ -2,28 +2,32 @@ cmake_minimum_required(VERSION 3.2)
 
 project(PasswordValidator)
 
+set(CMAKE_BUILD_TYPE Debug)
+# set(CMAKE_CXX_COMPILER "g++-12")
+set(CMAKE_IGNORE_PATH "external/")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2b -Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
 # definitions
-ADD_DEFINITIONS(-DUNICODE)
-ADD_DEFINITIONS(-D_UNICODE)
+add_definitions(-DUNICODE -D_UNICODE)
 
 # binary output path
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
 
-# get source files (yes, this isnt considered good practice, i know. but i'm lazyyy :p)
-file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/source/*.cpp
-                            ${PROJECT_SOURCE_DIR}/source/*.hpp)
+set(SRC_FILES ${PROJECT_SOURCE_DIR}/source/PasswordValidator.cpp
+              ${PROJECT_SOURCE_DIR}/source/parser/EntropyParser.cpp
+              ${PROJECT_SOURCE_DIR}/source/entropy/PasswordEntropy.cpp
+              ${PROJECT_SOURCE_DIR}/source/entropy/validation/PasswordValidation.cpp)
+
+# external projects
+add_subdirectory(external/libfmt/)
 
 # include directories
-# include_directories(${PROJECT_SOURCE_DIR}/libraries/.../include/)
-include_directories(${PROJECT_SOURCE_DIR}/libraries/spdlog/include/)
-include_directories(${PROJECT_SOURCE_DIR}/libraries/libfmt/include/)
+# include_directories(${PROJECT_SOURCE_DIR}/)
+include_directories(${PROJECT_SOURCE_DIR}/external/libfmt/include/
+                    ${PROJECT_SOURCE_DIR}/external/spdlog/include/)
 
-add_executable(PasswordValidator ${SRC_FILES})
+add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 # link necessary static libraries
-# target_link_libraries(PasswordValidator ${PROJECT_SOURCE_DIR}/libraries/.../....a)
-target_link_libraries(PasswordValidator ${PROJECT_SOURCE_DIR}/libraries/spdlog/libspdlog.a)
-target_link_libraries(PasswordValidator ${PROJECT_SOURCE_DIR}/libraries/libfmt/libfmt.a)
+# target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/)
+target_link_libraries(${PROJECT_NAME} fmt)
