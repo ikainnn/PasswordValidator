@@ -3,12 +3,10 @@ cmake_minimum_required(VERSION 3.2)
 project(PasswordValidator)
 
 set(CMAKE_BUILD_TYPE Debug)
-# set(CMAKE_CXX_COMPILER "g++-12")
-set(CMAKE_IGNORE_PATH "external/")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2b -Wall -Wextra")
 
 # definitions
-add_definitions(-DUNICODE -D_UNICODE)
+add_definitions(-DUNICODE -D_UNICODE -DCMAKE_EXPORT_COMPILE_COMMANDS)
 
 # binary output path
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
