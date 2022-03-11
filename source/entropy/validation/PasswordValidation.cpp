@@ -7,17 +7,8 @@
 
 namespace pswd::entropy::validation
 {
-    bool validate_password_length(std::string_view);
-    bool validate_password_ordering(std::string_view);
-    bool validate_password_symbols(std::string_view);
-
     constexpr auto g_minSize = 6;
     constexpr auto g_maxSize = 24;
-
-    bool validate_password(std::string_view password)
-    {
-        return validate_password_length(password) && validate_password_ordering(password) && validate_password_symbols(password);
-    }
 
     bool validate_password_length(std::string_view password)
     {
