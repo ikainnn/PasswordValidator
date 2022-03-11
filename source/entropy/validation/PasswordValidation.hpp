@@ -13,7 +13,17 @@ namespace pswd::entropy::validation
      * 
      * @return True if the password is a valid password, or false if it isnt.
      */
-    bool validate_password(std::string_view password);
+    
+    bool validate_password_length(std::string_view password);
+    bool validate_password_ordering(std::string_view password);
+    bool validate_password_symbols(std::string_view password);
+
+    template <class T> inline bool validate_password(T&& password)
+    {
+        return validate_password_length(std::forward<T>(password)) && 
+               validate_password_ordering(std::forward<T>(password)) && 
+               validate_password_symbols(std::forward<T>(password));
+    }
 }
 
 #endif
